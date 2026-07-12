@@ -36,19 +36,21 @@ OUT_FILE  = "manifest_vocab.json"
 # To get a code: in pCloud, share/get-link on the month's public folder, then copy
 # everything after "code=" in the resulting URL.
 MONTHS = {
-    "January 2026":  "PASTE_CODE_HERE",
-    "February 2026": "PASTE_CODE_HERE",
-    "March 2026":    "PASTE_CODE_HERE",
-    "April 2026":    "PASTE_CODE_HERE",
+    "January 2026":  "kZmvQA5Z47mnuk84yzuoPpXXq4D4EHcVN2dV",
+    "February 2026": "kZL5mA5ZRK8XSTKKiKXSbF1sgC8fYQAIYNey",
+    "March 2026":    "kZY5mA5ZHj5J1bflKAyhCrr7lpgpBmFxPn87",
 }
 
 # Only fill this in if a month needs to be split into per-Part links (same reason
 # April got split for Number Shape Method — link too big for pCloud to display).
 # Leave SPLIT_MONTH = "" if no month needs this.
-SPLIT_MONTH = ""          # e.g. "April 2026" — leave "" if not needed
+SPLIT_MONTH = "April 2026"
 SPLIT_PARTS = {
-    # "Part 1": "PASTE_CODE_HERE",
-    # "Part 2": "PASTE_CODE_HERE",
+    "Part 1": "kZAOaA5ZM5HVYvimKKF52c5CAQudoQQARYQV",
+    "Part 2": "kZ3OaA5ZfetSvtAH9zjR6J7YC3FuNST8WbV7",
+    "Part 3": "kZGOaA5ZdmLsl98vl5XErzYbPnlvJ8iixSU7",
+    "Part 4": "kZvOaA5Z1caa0jC9O35dEfSJ2XEAO5beRwH7",
+    "Part 5": "kZiOaA5Zw0qWhrR4nHLcEN0z5IfT78k1OoKk",
 }
 
 

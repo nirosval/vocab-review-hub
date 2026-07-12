@@ -232,34 +232,29 @@ function formatTime(iso) {
   }
 }
 
-async function loadMedia(item) {
-  mintLink(item.code, item.video_fileid, "videoPlayer", "videoStatus");
-  if (item.audio_fileid) {
-    mintLink(item.code, item.audio_fileid, "audioPlayer", "audioStatus");
-  } else {
-    document.getElementById("audioStatus").textContent = "No audio file found for this lecture.";
-  }
-}
-
-async function mintLink(code, fileid, playerId, statusId) {
-  const statusEl = document.getElementById(statusId);
-  const playerEl = document.getElementById(playerId);
-  if (!fileid) {
-    statusEl.textContent = "No file id in manifest.";
-    return;
-  }
-  try {
-    const r = await fetch("/api/getlink", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code, fileid }),
+function loadMedia(item) {
+  const videoEl = document.getElementById("videoPlayer");
+  const videoStatus = document.getElementById("videoStatus");
+  if (item.video_fileid) {
+    videoEl.src = `/api/stream?code=${encodeURIComponent(item.code)}&fileid=${encodeURIComponent(item.video_fileid)}`;
+    videoStatus.textContent = "";
+    videoEl.addEventListener("error", () => {
+      videoStatus.textContent = "Couldn't load video — check the file in pCloud.";
     });
-    const data = await r.json();
-    if (!r.ok) throw new Error(data.error || "link mint failed");
-    playerEl.src = data.url;
-    statusEl.textContent = "";
-  } catch (e) {
-    statusEl.textContent = `Couldn't load: ${e.message}`;
+  } else {
+    videoStatus.textContent = "No video file id in manifest.";
+  }
+
+  const audioEl = document.getElementById("audioPlayer");
+  const audioStatus = document.getElementById("audioStatus");
+  if (item.audio_fileid) {
+    audioEl.src = `/api/stream?code=${encodeURIComponent(item.code)}&fileid=${encodeURIComponent(item.audio_fileid)}`;
+    audioStatus.textContent = "";
+    audioEl.addEventListener("error", () => {
+      audioStatus.textContent = "Couldn't load audio — check the file in pCloud.";
+    });
+  } else {
+    audioStatus.textContent = "No audio file found for this lecture.";
   }
 }
 
