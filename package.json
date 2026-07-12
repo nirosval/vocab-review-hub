@@ -1,0 +1,9 @@
+{
+  "name": "vocab-review-hub",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Checking queue for Vocab Method videos — video, audio, and script review with Google Sheets logging.",
+  "engines": {
+    "node": ">=18"
+  }
+}

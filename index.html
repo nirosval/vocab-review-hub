@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Vocab Method — Checking Queue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap"
+  rel="stylesheet"
+/>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">✓</span>
+        <div class="brand-text">
+          <h1>Checking Queue</h1>
+          <p>Vocab Method — video, audio &amp; script review</p>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <input id="checkerName" class="checker-input" type="text" placeholder="Your name (checker)" />
+        <span id="queueCount" class="queue-count">0 lectures</span>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="queue-pane">
+        <div class="queue-controls">
+          <input id="searchBox" type="text" placeholder="Search course or lecture…" />
+          <div class="filter-chips" id="filterChips">
+            <button class="chip active" data-filter="all">All</button>
+            <button class="chip" data-filter="not-started">Not started</button>
+            <button class="chip" data-filter="needs-revision">Needs revision</button>
+            <button class="chip" data-filter="passed">Passed</button>
+          </div>
+        </div>
+        <div id="queueList" class="queue-list">
+          <div class="queue-empty">Loading manifest…</div>
+        </div>
+      </aside>
+
+      <main class="review-pane" id="reviewPane">
+        <div class="review-placeholder">
+          <span class="placeholder-mark">⌘</span>
+          <p>Pick a lecture from the queue to start checking.</p>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
