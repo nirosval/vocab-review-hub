@@ -54,7 +54,7 @@ except ImportError:
 
 # ─── Constants ──────────────────────────────────────────────────
 
-METHOD_FOLDER = "Number Shape Method"
+METHOD_FOLDER = "Number Shape Method"  # default; overridable via --method-folder
 MEMORY_COURSE_SUFFIXES = (" Memory Course", " Memory Mastery")
 # A course folder ends in some combination of Memory / Mastery / Course,
 # e.g. "Memory Course", "Memory Mastery", or "Memory Mastery Course".
@@ -599,7 +599,18 @@ def main() -> int:
     ap.add_argument("--report", default=None,
                     help="Read an existing intros JSON and list which courses "
                          "are missing one or both intros. No scanning.")
+    ap.add_argument("--method-folder", default=None,
+                    help="Name of the method subfolder to look inside for the "
+                         "Contextualised List docx (default: 'Number Shape "
+                         "Method'). Pass 'Vocab Method' when enriching a Vocab "
+                         "Method manifest — otherwise it will silently pick up "
+                         "the wrong method's script if a course happens to "
+                         "have both folders.")
     args = ap.parse_args()
+
+    global METHOD_FOLDER
+    if args.method_folder:
+        METHOD_FOLDER = args.method_folder
 
     script_dir = Path(__file__).resolve().parent
 
