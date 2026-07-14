@@ -5,7 +5,7 @@ let currentFilter = "all";
 let currentSearch = "";
 let selectedKey = null;      // "<course>::<lecture>"
 
-const COMPONENTS = ["video", "audio", "script"];
+const COMPONENTS = ["video", "audio"];
 
 // ---------- Boot ----------
 init();
@@ -151,15 +151,6 @@ async function openReview(key) {
       </div>
     </div>
 
-    <div class="panel" style="margin-bottom:20px;">
-      <h3>Script (List intro)</h3>
-      <div class="script-text">${
-        item.script_intro
-          ? escapeHtml(item.script_intro)
-          : `<span class="script-empty">No script intro attached to this lecture yet.</span>`
-      }</div>
-    </div>
-
     <div class="check-form">
       <h3 style="margin-bottom:14px;">Log a check</h3>
       <div class="check-row">
@@ -168,7 +159,6 @@ async function openReview(key) {
           <select id="componentSelect">
             <option value="video">Video</option>
             <option value="audio">Audio</option>
-            <option value="script">Script</option>
           </select>
         </div>
         <div class="field">
