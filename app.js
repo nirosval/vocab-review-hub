@@ -1,3 +1,10 @@
+// ---------- Config ----------
+// Paste your deployed Cloudflare Worker URL here (from dash.cloudflare.com →
+// Workers & Pages → your worker → the *.workers.dev URL shown after deploy).
+// This replaces Vercel's /api/stream to avoid Vercel's Fast Origin Transfer
+// bandwidth cap — Cloudflare Workers don't charge for egress.
+const STREAM_WORKER_URL = "https://vocab-review-hub.nirosvalinojales03.workers.dev/";
+
 // ---------- State ----------
 let manifestItems = [];      // from data/manifest_vocab.json
 let statusData = { history: [], latest: {} };
@@ -226,7 +233,7 @@ function loadMedia(item) {
   const videoEl = document.getElementById("videoPlayer");
   const videoStatus = document.getElementById("videoStatus");
   if (item.video_fileid) {
-    videoEl.src = `/api/stream?code=${encodeURIComponent(item.code)}&fileid=${encodeURIComponent(item.video_fileid)}`;
+    videoEl.src = `${STREAM_WORKER_URL}?code=${encodeURIComponent(item.code)}&fileid=${encodeURIComponent(item.video_fileid)}`;
     videoStatus.textContent = "";
     videoEl.addEventListener("error", () => {
       videoStatus.textContent = "Couldn't load video — check the file in pCloud.";
@@ -238,7 +245,7 @@ function loadMedia(item) {
   const audioEl = document.getElementById("audioPlayer");
   const audioStatus = document.getElementById("audioStatus");
   if (item.audio_fileid) {
-    audioEl.src = `/api/stream?code=${encodeURIComponent(item.code)}&fileid=${encodeURIComponent(item.audio_fileid)}`;
+    audioEl.src = `${STREAM_WORKER_URL}?code=${encodeURIComponent(item.code)}&fileid=${encodeURIComponent(item.audio_fileid)}`;
     audioStatus.textContent = "";
     audioEl.addEventListener("error", () => {
       audioStatus.textContent = "Couldn't load audio — check the file in pCloud.";
