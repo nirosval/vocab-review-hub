@@ -1,9 +1,6 @@
 // ---------- Config ----------
-// Paste your deployed Cloudflare Worker URL here (from dash.cloudflare.com →
-// Workers & Pages → your worker → the *.workers.dev URL shown after deploy).
-// This replaces Vercel's /api/stream to avoid Vercel's Fast Origin Transfer
-// bandwidth cap — Cloudflare Workers don't charge for egress.
-const STREAM_WORKER_URL = "https://vocab-review-hub.nirosvalinojales03.workers.dev/";
+// Deployed Cloudflare Worker URL (without trailing slash)
+const STREAM_WORKER_URL = "https://vocab-review-hub.nirosvalinojales03.workers.dev";
 
 // ---------- State ----------
 let manifestItems = [];      // from data/manifest_vocab.json
@@ -64,8 +61,6 @@ function lectureKey(item) {
 }
 
 function overallStatus(item) {
-  // "Needs revision" wins if any component needs it; "Passed" only if every
-  // component that has ever been checked is Passed; otherwise Not started.
   let anyChecked = false;
   let anyRevision = false;
   let allPassed = true;
@@ -233,7 +228,8 @@ function loadMedia(item) {
   const videoEl = document.getElementById("videoPlayer");
   const videoStatus = document.getElementById("videoStatus");
   if (item.video_fileid) {
-    videoEl.src = `${STREAM_WORKER_URL}?code=${encodeURIComponent(item.code)}&fileid=${encodeURIComponent(item.video_fileid)}`;
+    // Inayos ang URL construction: tinawag ang /stream endpoint
+    videoEl.src = `${STREAM_WORKER_URL}/stream?code=${encodeURIComponent(item.code)}&fileid=${encodeURIComponent(item.video_fileid)}`;
     videoStatus.textContent = "";
     videoEl.addEventListener("error", () => {
       videoStatus.textContent = "Couldn't load video — check the file in pCloud.";
@@ -245,7 +241,8 @@ function loadMedia(item) {
   const audioEl = document.getElementById("audioPlayer");
   const audioStatus = document.getElementById("audioStatus");
   if (item.audio_fileid) {
-    audioEl.src = `${STREAM_WORKER_URL}?code=${encodeURIComponent(item.code)}&fileid=${encodeURIComponent(item.audio_fileid)}`;
+    // Inayos ang URL construction: tinawag ang /stream endpoint
+    audioEl.src = `${STREAM_WORKER_URL}/stream?code=${encodeURIComponent(item.code)}&fileid=${encodeURIComponent(item.audio_fileid)}`;
     audioStatus.textContent = "";
     audioEl.addEventListener("error", () => {
       audioStatus.textContent = "Couldn't load audio — check the file in pCloud.";
@@ -291,7 +288,6 @@ function wireCheckForm(item) {
       const data = await r.json();
       if (!r.ok) throw new Error(data.error ? JSON.stringify(data.error) : "save failed");
 
-      // reflect locally without a full refetch
       const entry = { timestamp: new Date().toISOString(), month: item.month, course: item.course, lecture: item.lecture, checker, component, status, notes };
       statusData.history.push(entry);
       statusData.latest[`${item.course}::${item.lecture}::${component}`] = entry;
