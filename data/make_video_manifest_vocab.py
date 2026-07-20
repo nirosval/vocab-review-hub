@@ -2,27 +2,6 @@
 """
 make_video_manifest_vocab.py — build manifest.json for the Recall video-review app,
 VOCAB METHOD version.
-
-Same scan logic as make_video_manifest.py, but looks for "Vocab Method" folders
-instead of "Number Shape Method". Does NOT download anything during the scan — for
-each month it lists the public folder once, finds "Vocab Method" folders at any
-depth, and records each .mp4's pCloud file id (plus the matching .txt script's file
-id, if present). The app mints fresh per-viewer links for both at review time.
-
->>> CHECK THIS <<<
-SUBFOLDER below assumes the folder is literally named "Vocab Method" in pCloud.
-If it's actually named something else (e.g. "Vocabulary Method"), change it to match
-EXACTLY what you see in pCloud — the match is case-insensitive but must be the whole
-name.
-
-If one month's Vocab Method videos turn out to be too big for a single public link
-(same "2293 Contents of the link are too big to be displayed" error April hit), split
-that month into per-Part links the same way APRIL_PARTS does below, and tag them with
-their part.
-
-Usage:
-    pip install requests
-    python make_video_manifest_vocab.py   # writes manifest_vocab.json in the current folder
 """
 
 import os, json, requests
@@ -31,19 +10,12 @@ API_HOST  = "api.pcloud.com"          # US (u.pcloud.link).  EU -> "eapi.pcloud.
 SUBFOLDER = "Vocab Method"
 OUT_FILE  = "manifest_vocab.json"
 
-# label -> public link CODE (the part after code= in each month's share URL)
-# Fill these in with the Vocab Method share-link codes for each month.
-# To get a code: in pCloud, share/get-link on the month's public folder, then copy
-# everything after "code=" in the resulting URL.
 MONTHS = {
     "January 2026":  "kZmvQA5Z47mnuk84yzuoPpXXq4D4EHcVN2dV",
     "February 2026": "kZL5mA5ZRK8XSTKKiKXSbF1sgC8fYQAIYNey",
     "March 2026":    "kZY5mA5ZHj5J1bflKAyhCrr7lpgpBmFxPn87",
 }
 
-# Only fill this in if a month needs to be split into per-Part links (same reason
-# April got split for Number Shape Method — link too big for pCloud to display).
-# Leave SPLIT_MONTH = "" if no month needs this.
 SPLIT_MONTH = "April 2026"
 SPLIT_PARTS = {
     "Part 1": "kZAOaA5ZM5HVYvimKKF52c5CAQudoQQARYQV",
@@ -67,7 +39,7 @@ def api(method, **p):
 
 
 items = []
-stats = {"folders": 0, "nsm": 0, "videos": 0}
+stats = {"folders": 0, "vocab_folders": 0, "videos": 0}
 
 
 def walk(node, code, month, part):
@@ -76,7 +48,7 @@ def walk(node, code, month, part):
             continue
         stats["folders"] += 1
         if c["name"].strip().lower() == SUBFOLDER.strip().lower():
-            stats["nsm"] += 1
+            stats["vocab_folders"] += 1
             emit(c, node.get("name", ""), code, month, part)
         else:
             walk(c, code, month, part)
@@ -96,9 +68,11 @@ def emit(method_folder, course, code, month, part):
             video = videos[0]
             audio = audios[0] if audios else None
             items.append({
-                "month": month, "part": part, "course": course,
+                "month": month, 
+                "part": part, 
+                "course": course,
                 "lecture": node.get("name", ""),
-                "title": os.path.splitext(video["name"])[0],
+                "title": node.get("name", "") or os.path.splitext(video["name"])[0],
                 "video_fileid": video["fileid"],
                 "audio_fileid": audio["fileid"] if audio else None,
                 "code": code,
@@ -140,7 +114,7 @@ def main():
         for part, code in SPLIT_PARTS.items():
             scan(f"{SPLIT_MONTH} · {part}", SPLIT_MONTH, part, code)
 
-    log(f"\nTotals — folders scanned: {stats['folders']}  |  Number Shape Method folders: {stats['nsm']}  |  videos: {stats['videos']}")
+    log(f"\nTotals — folders scanned: {stats['folders']}  |  Vocab Method folders: {stats['vocab_folders']}  |  videos: {stats['videos']}")
     with open(OUT_FILE, "w", encoding="utf-8") as f:
         json.dump({"items": items}, f, indent=2, ensure_ascii=False)
     log(f"Wrote {os.path.abspath(OUT_FILE)}  ({len(items)} videos)")
