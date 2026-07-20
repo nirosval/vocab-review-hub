@@ -1,5 +1,5 @@
 // ---------- Config ----------
-// Deployed Cloudflare Worker URL (without trailing slash)
+// Cloudflare Worker URL
 const STREAM_WORKER_URL = "https://vocab-review-hub.nirosvalinojales03.workers.dev";
 
 // ---------- State ----------
@@ -228,7 +228,7 @@ function loadMedia(item) {
   const videoEl = document.getElementById("videoPlayer");
   const videoStatus = document.getElementById("videoStatus");
   if (item.video_fileid) {
-    // Inayos ang URL construction: tinawag ang /stream endpoint
+    // ITINAWAG NA ANG CLOUDFLARE WORKER ENDPOINT
     videoEl.src = `${STREAM_WORKER_URL}/stream?code=${encodeURIComponent(item.code)}&fileid=${encodeURIComponent(item.video_fileid)}`;
     videoStatus.textContent = "";
     videoEl.addEventListener("error", () => {
@@ -241,7 +241,7 @@ function loadMedia(item) {
   const audioEl = document.getElementById("audioPlayer");
   const audioStatus = document.getElementById("audioStatus");
   if (item.audio_fileid) {
-    // Inayos ang URL construction: tinawag ang /stream endpoint
+    // ITINAWAG NA ANG CLOUDFLARE WORKER ENDPOINT
     audioEl.src = `${STREAM_WORKER_URL}/stream?code=${encodeURIComponent(item.code)}&fileid=${encodeURIComponent(item.audio_fileid)}`;
     audioStatus.textContent = "";
     audioEl.addEventListener("error", () => {
